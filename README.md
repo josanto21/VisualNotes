@@ -1,4 +1,4 @@
-# VisualNotes · v0.8
+# VisualNotes · v0.8.1
 
 Convierte apuntes universitarios en material para estudiar: tarjetas, mapas editables, fechas, procedimientos, tablas y fórmulas. Cada elemento permite consultar el fragmento que lo respalda. Puedes ajustar el objetivo y el detalle, deshacer/rehacer, guardar clases e importar respaldos.
 
@@ -13,6 +13,8 @@ Convierte apuntes universitarios en material para estudiar: tarjetas, mapas edit
 No se requieren claves de API para la opción local. Los modelos, las herramientas y la configuración se guardan en esta carpeta, fuera del control de versiones. Tras la instalación, las clases se procesan en tu equipo. La IA de texto usa CPU y se apaga tras un minuto sin uso.
 
 ## Qué utiliza la IA local
+
+Para ejecutar los modelos en otra computadora y abrir la interfaz desde la tuya, consulta [MIRANDA.md](MIRANDA.md). El acceso directo **Conectar-Tailscale.cmd** configura HTTPS privado con Tailscale Serve en el equipo que ejecuta los modelos.
 
 | Entrada | Herramienta | Alcance |
 | --- | --- | --- |

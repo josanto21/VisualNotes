@@ -1,6 +1,6 @@
 {
   "name": "visualnotes-adaptativo",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "private": true,
   "description": "Representación pedagógica visual adaptativa sobre VisualNotes v0.3",
   "scripts": {
