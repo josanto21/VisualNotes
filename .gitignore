@@ -1,0 +1,6 @@
+.env
+node_modules/
+.tools/
+models/
+.local-work/
+*.log

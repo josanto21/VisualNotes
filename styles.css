@@ -1,0 +1,92 @@
+:root{
+  --bg:#EAEFF5; --panel:#FFFFFF; --ink:#0E1A2B; --muted:#566478; --line:#D0D9E4;
+  --n1:#2F5BFF; --n2:#00806C; --n3:#9A6400; --on:#FFFFFF; --edge:#8FA0B6; --mark:#FFE58A; --soft:#F3F6FA;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B1220; --panel:#131C2E; --ink:#E7EDF7; --muted:#9AA9BF; --line:#24324A;
+    --n1:#6C8CFF; --n2:#2CC7AB; --n3:#F0B440; --on:#0B1220; --edge:#4A5C78; --mark:#5B4A10; --soft:#0F1829;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B1220; --panel:#131C2E; --ink:#E7EDF7; --muted:#9AA9BF; --line:#24324A;
+  --n1:#6C8CFF; --n2:#2CC7AB; --n3:#F0B440; --on:#0B1220; --edge:#4A5C78; --mark:#5B4A10; --soft:#0F1829;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+:root{--hl:#E0245E}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--hl:#FF6B8E}}
+:root[data-theme="dark"]{--hl:#FF6B8E}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.55 "Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif}
+h1,h2,h3{font-family:"Bricolage Grotesque","Trebuchet MS",system-ui,sans-serif;margin:0;line-height:1.15}
+.wrap{max-width:1180px;margin:0 auto;padding:24px 20px 40px}
+header{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 16px;margin-bottom:20px}
+h1{font-size:clamp(28px,4vw,40px);font-weight:800;letter-spacing:-.02em}
+header p{margin:0;color:var(--muted);flex:1 1 280px}
+.badge{font-size:13px;border:1px solid var(--line);background:var(--panel);color:var(--muted);padding:3px 10px;border-radius:999px}
+.grid{display:grid;grid-template-columns:minmax(280px,360px) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:860px){.grid{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px}
+.stack{display:grid;gap:16px}
+h2{font-size:18px;font-weight:600;margin-bottom:10px}
+label{display:block;font-size:14px;color:var(--muted);margin-bottom:6px}
+textarea,input[type=text],select{width:100%;font:inherit;font-size:15px;color:var(--ink);background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:8px 12px}
+textarea{min-height:220px;resize:vertical}
+textarea:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,.node:focus-visible rect{outline:3px solid var(--n1);outline-offset:2px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:12px}
+button{font:inherit;font-weight:700;font-size:15px;cursor:pointer;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--ink);padding:8px 14px}
+button:hover:not(:disabled){border-color:var(--n1)}
+button:disabled{opacity:.45;cursor:not-allowed}
+button.primary{background:var(--n1);border-color:var(--n1);color:var(--on)}
+button.sel{background:var(--ink);color:var(--panel);border-color:var(--ink)}
+button.small{font-size:13px;padding:4px 10px;font-weight:400}
+button.danger:hover{border-color:#C0392B;color:#C0392B}
+.range{display:flex;align-items:center;gap:10px;margin-top:12px}
+.range input{flex:1;accent-color:var(--n1)}
+.range output{min-width:2ch;text-align:right;font-weight:700}
+.mapbox{position:relative;border-radius:8px;background:var(--soft);border:1px solid var(--line);overflow:hidden}
+svg#map{display:block;width:100%;height:clamp(380px,62vh,580px);touch-action:none;cursor:grab}
+svg#map:active{cursor:grabbing}
+.edge{stroke:var(--edge);stroke-linecap:round;transition:opacity .15s}
+.edge.weak{stroke-dasharray:4 5}
+.edge.manual{stroke:var(--ink);opacity:.55}
+.node{cursor:grab;transition:opacity .15s}
+.node text{font:700 14px "Atkinson Hyperlegible",system-ui,sans-serif;fill:var(--on);pointer-events:none;text-anchor:middle;dominant-baseline:central}
+.node.t0 rect{fill:var(--n1)} .node.t1 rect{fill:var(--n2)} .node.t2 rect{fill:var(--n3)}
+.node.manual rect{stroke:var(--on);stroke-width:2;stroke-dasharray:4 3}
+.node.sel rect{stroke:var(--ink);stroke-width:3;stroke-dasharray:none}
+.node.linking rect{stroke:var(--hl);stroke-width:3;stroke-dasharray:4 4}
+.dim{opacity:.18}
+.edge.manual.dim{opacity:.1}
+.zoom{position:absolute;top:8px;right:8px;display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.zoom button{min-width:36px;height:36px;padding:0 8px;font-size:18px;line-height:1;background:var(--panel)}
+.zoom button.fit,.zoom button.exp{font-size:13px;font-weight:400}
+.empty{position:absolute;inset:0;display:none;place-items:center;text-align:center;padding:24px;color:var(--muted)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin:10px 0 0;font-size:13px;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+.legend i.dash{border:2px dashed var(--ink);background:none;width:12px;height:12px;vertical-align:-2px}
+.edit{margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
+.edit h3{font-size:16px;margin-bottom:10px}
+.erow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:8px}
+.erow input[type=text]{flex:1 1 180px;width:auto}
+.erow select{flex:1 1 160px;width:auto}
+.erow label{margin:0}
+.detail{margin-top:16px}
+.detail h3{font-size:16px;margin-bottom:8px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.chip{font-size:13px;padding:2px 10px;border-radius:999px}
+.frag{margin:0 0 8px;padding:8px 10px;border-left:3px solid var(--n1);background:var(--soft);border-radius:0 6px 6px 0;font-size:15px}
+mark{background:var(--mark);color:inherit;border-radius:3px;padding:0 2px}
+.fb{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
+.fb span{color:var(--muted);font-size:14px}
+.log{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.log li{display:flex;gap:8px;align-items:center;justify-content:space-between;border:1px solid var(--line);border-radius:8px;padding:8px 10px;background:var(--soft)}
+.log .t{min-width:0}
+.log .t b{display:block;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.log .t small{color:var(--muted)}
+.log .act{display:flex;gap:6px;flex-shrink:0}
+.hint{color:var(--muted);font-size:14px;margin:0}
+@media (prefers-reduced-motion:reduce){.edge,.node{transition:none}}
