@@ -4,7 +4,7 @@ Los modelos y el servidor funcionan en Miranda. En Parfait solo abres la página
 
 ## Primera instalación, dentro de Miranda
 
-1. Descarga [el proyecto completo](https://github.com/josanto21/VisualNotes/archive/refs/heads/main.zip) y descomprime la carpeta.
+1. Descarga [el proyecto completo](https://github.com/josanto21/VisualNotes/archive/refs/heads/main.zip). En el Explorador de archivos, haz clic derecho sobre **VisualNotes-main.zip → Extraer todo → Extraer**. En la carpeta que se abra, entra en **VisualNotes-main**: deben aparecer los archivos `.cmd` junto con `setup-local.mjs`, `configure-tailscale.mjs` y `server.mjs`. Ejecuta los accesos directos desde esa carpeta extraída. Abrir el ZIP con doble clic y ejecutar un `.cmd` desde allí solo copia ese acceso directo a una carpeta temporal y deja fuera sus archivos necesarios.
 2. Abre **Instalar-IA-gratis.cmd**. La descarga inicial es de aproximadamente 1,4 GB. Si falta Node.js, instala [Node.js LTS](https://nodejs.org/) y vuelve a abrir el archivo.
 3. Abre **Conectar-Tailscale.cmd**. Comprueba Tailscale, detecta el nombre de ese equipo, prepara el acceso privado por HTTPS y escribe su URL en `.env`. Si Tailscale solicita habilitar HTTPS, abre el enlace que muestra y completa ese paso.
 4. Abre **Iniciar.cmd**. Mantén la ventana abierta. Si ya había un servidor abierto de esta carpeta, ciérralo y vuelve a iniciarlo para cargar la configuración nueva.

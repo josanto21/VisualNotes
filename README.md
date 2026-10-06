@@ -1,10 +1,10 @@
-# VisualNotes · v0.8.1
+# VisualNotes · v0.8.2
 
 Convierte apuntes universitarios en material para estudiar: tarjetas, mapas editables, fechas, procedimientos, tablas y fórmulas. Cada elemento permite consultar el fragmento que lo respalda. Puedes ajustar el objetivo y el detalle, deshacer/rehacer, guardar clases e importar respaldos.
 
 ## Empezar
 
-1. Descarga el proyecto y descomprime la carpeta.
+1. Descarga el proyecto. Haz clic derecho en el ZIP y elige **Extraer todo → Extraer**. Entra en la carpeta **VisualNotes-main** extraída, donde aparecen tanto los `.cmd` como los `.mjs`. Ejecuta los accesos directos desde esa carpeta.
 2. Abre **Iniciar.cmd** y entra en http://127.0.0.1:4317. Mantén la ventana del servidor abierta.
 3. Pega una clase o pulsa **Ver ejemplo**. El modo básico funciona sin descargar modelos.
 4. Para activar la IA gratuita, abre **Instalar-IA-gratis.cmd**. Descarga aproximadamente 1,4 GB la primera vez. Requiere Windows de 64 bits, conexión y Node.js 20 o posterior; también reconoce el runtime incluido con Codex.
