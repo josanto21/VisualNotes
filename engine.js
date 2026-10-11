@@ -5,6 +5,30 @@
   function key(s){let v=norm(s).replace(/\s+/g,' ');if(!v.includes(' ')){if(v.length>5&&v.endsWith('es'))v=v.slice(0,-2);else if(v.length>4&&v.endsWith('s'))v=v.slice(0,-1);}return v;}
   function hash(s){let h=2166136261;for(const c of s){h^=c.codePointAt(0);h=Math.imul(h,16777619);}return (h>>>0).toString(36);}
   function sources(text){const out=[];const re=/[^\n]+/g;let m;while((m=re.exec(text))){const line=m[0];const isList=/^\s*(?:\d+[.)]|paso\s+\d+\s*:)/i.test(line);const pieces=isList||line.includes('|')?[{text:line,offset:0}]:Array.from(line.matchAll(/.+?(?:[.!?](?=\s|$)|$)/g),x=>({text:x[0],offset:x.index}));for(const p of pieces){const trim=p.text.trim();if(!trim)continue;const start=m.index+p.offset+p.text.indexOf(trim);out.push({id:'s'+(out.length+1),text:trim,start,end:start+trim.length});}}return out;}
+  const MONTHS=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  function dateMatches(text){
+    const found=[],reserved=[];
+    const overlaps=(start,end)=>reserved.some(span=>start<span.end&&end>span.start);
+    const monthNumber=name=>name.toLowerCase()==='setiembre'?9:MONTHS.indexOf(name.toLowerCase())+1;
+    function add(match,year,month,day){
+      const start=match.index,end=start+match[0].length;if(overlaps(start,end))return;
+      reserved.push({start,end});
+      const checkYear=year===null?2000:year;
+      if(month!==null){const days=[31,(checkYear%4===0&&(checkYear%100!==0||checkYear%400===0))?29:28,31,30,31,30,31,31,30,31,30,31];if(month<1||month>12||day!==null&&(day<1||day>days[month-1]))return;}
+      found.push({label:match[0],start,end,order:year===null?null:year*10000+(month||1)*100+(day||1)});
+    }
+    for(const m of text.matchAll(/\b([1-9]\d{3})-(\d{1,2})-(\d{1,2})\b/g))add(m,Number(m[1]),Number(m[2]),Number(m[3]));
+    for(const m of text.matchAll(/\b(\d{1,2})([/.\-])(\d{1,2})\2([1-9]\d{3})\b/g))add(m,Number(m[4]),Number(m[3]),Number(m[1]));
+    const months=MONTHS.join('|')+'|setiembre';
+    for(const m of text.matchAll(new RegExp('\\b(\\d{1,2})\\s+de\\s+('+months+')(?:\\s+(?:de|del)\\s+([1-9]\\d{3}))?\\b','gi')))add(m,m[3]?Number(m[3]):null,monthNumber(m[2]),Number(m[1]));
+    for(const m of text.matchAll(new RegExp('\\b('+months+')\\s+(?:de|del)\\s+([1-9]\\d{3})\\b','gi')))add(m,Number(m[2]),monthNumber(m[1]),null);
+    for(const m of text.matchAll(/\b(?:1[0-9]{3}|20[0-9]{2}|2100)\b/g)){
+      if(/^\s*(?:[,.]\d|(?:V|W|Hz|kHz|MHz|GHz|Pa|kPa|MPa|kg|mg|km|mm|cm|mA|mV|kW|MW|ohm|ohmios|vatios|voltios|metros|litros)\b)/i.test(text.slice(m.index+m[0].length)))continue;
+      add(m,Number(m[0]),null,null);
+    }
+    return found.sort((a,b)=>a.start-b.start);
+  }
+  function dateOrder(label){return dateMatches(label)[0]?.order??null;}
   function analyze(text,preferences={}){
     if(typeof text!=='string'||text.length>60000)throw new Error('Usa hasta 60.000 caracteres por clase.');
     const src=sources(text);const tally=new Map();
@@ -25,8 +49,8 @@
     relations.sort((a,b)=>b.sourceIds.length-a.sourceIds.length);relations.splice(max*2);
     const events=[],procedures=[],tables=[],formulas=[];let group=null;
     for(const s of src){
-      const years=Array.from(s.text.matchAll(/\b(?:1[0-9]{3}|20[0-9]{2}|2100)\b/g),m=>m[0]);
-      if(years.length&&!s.text.includes('|'))events.push({id:'e-'+s.id,date:Array.from(new Set(years)).join(' / '),text:s.text,sourceIds:[s.id]});
+      const dates=dateMatches(s.text);
+      if(dates.length&&!s.text.includes('|'))events.push({id:'e-'+s.id,date:Array.from(new Set(dates.map(d=>d.label))).join(' / '),text:s.text,sourceIds:[s.id]});
       const step=s.text.match(/^(?:([0-9]{1,2})[.)]\s+|paso\s+([0-9]{1,2})\s*:\s*)(.+)$/i);
       if(step){const order=Number(step[1]||step[2]);if(!group||order<=group.steps[group.steps.length-1].order){group={id:'p-'+s.id,title:'Procedimiento del texto',steps:[]};procedures.push(group);}group.steps.push({id:'step-'+s.id,order,text:step[3],sourceIds:[s.id]});}else group=null;
       if(/\S\s*=\s*\S/.test(s.text)&&!s.text.includes('|'))formulas.push({id:'f-'+s.id,expression:s.text,sourceIds:[s.id]});
@@ -52,5 +76,5 @@
   }
   function available(doc){return [{id:'guide',label:'Ideas',count:doc.concepts.length||doc.sources.length,reason:'Ideas con los fragmentos de tus apuntes que las explican.'},{id:'steps',label:'Paso a paso',count:doc.procedures.reduce((n,p)=>n+p.steps.length,0),reason:'Sigue los pasos en el orden en que aparecen en la clase.'},{id:'timeline',label:'Fechas',count:doc.events.length,reason:'Repasa qué pasó y cuándo.'},{id:'tables',label:'Comparar',count:doc.tables.length,reason:'Mira las diferencias en una tabla.'},{id:'formulas',label:'Fórmulas',count:doc.formulas.length,reason:'Consulta las expresiones junto a tus apuntes.'},{id:'map',label:'Mapa',count:doc.concepts.length,reason:'Las líneas del mapa básico unen ideas que aparecen juntas; no indican causa y efecto.'}];}
   function graph(doc){const nodes=doc.concepts.map((c,i)=>({...c,tier:i===0?0:i<=Math.max(2,Math.round(doc.concepts.length*.3))?1:2,manual:false}));const indexes=new Map(nodes.map((n,i)=>[n.id,i]));return {nodes,edges:doc.relations.map(r=>({...r,a:indexes.get(r.from),b:indexes.get(r.to),w:r.sourceIds.length,weak:false,manual:false})),sentences:doc.sources.map(s=>s.text),sentKeys:doc.sources.map(s=>new Set(nodes.filter(n=>n.sourceIds.includes(s.id)).map(n=>n.key)))};}
-  return {analyze,validate,sources,available,graph,norm,key,hash};
+  return {analyze,validate,sources,available,graph,norm,key,hash,dateOrder};
 });
