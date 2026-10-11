@@ -10,3 +10,21 @@ test('validación acepta estructura respaldada y rechaza fuentes falsas',()=>{co
 test('valida extremos de relaciones y forma de tablas',()=>{const text='Los conceptos tienen relaciones.';const raw={title:'Clase',concepts:[{id:'c1',label:'Conceptos',sourceIds:['s1']}],relations:[],events:[],procedures:[],tables:[],formulas:[]};assert.throws(()=>E.validate({...raw,relations:[{id:'r1',from:'c1',to:'c2',label:'Causa',directed:true,sourceIds:['s1']}]},text),/Relación/);assert.throws(()=>E.validate({...raw,tables:[{id:'t1',title:'Tabla',headers:['A','B'],rows:[{cells:['Una'],sourceIds:['s1']}]}]},text),/Fila/);});
 test('límites de entrada y texto vacío',()=>{assert.throws(()=>E.analyze('a'.repeat(60001)));assert.equal(E.analyze('').concepts.length,0);});
 test('no trata una negación como parte de un nombre; conserva términos con preposiciones repetidos',()=>{const d=E.analyze('La expresión del pico no es una fórmula del valor medio. El condensador de filtrado reduce el rizado. El condensador de filtrado almacena carga.',{max:24});assert.ok(!d.concepts.some(c=>c.label==='expresión del pico no'));assert.ok(d.concepts.some(c=>c.label==='condensador de filtrado'));});
+
+test('fechas completas conservan día, mes y año en varios formatos',()=>{
+ const cases=[['El 10 de octubre de 2026 se entrega el proyecto.','10 de octubre de 2026'],['La clase será el 10/10/2026.','10/10/2026'],['La evaluación será el 2026-10-10.','2026-10-10'],['La exposición será el 10.10.2026.','10.10.2026'],['La práctica será el 10-10-2026.','10-10-2026'],['La reunión será en octubre de 2026.','octubre de 2026']];
+ for(const [text,date] of cases){const d=E.analyze(text);assert.equal(d.events.length,1,text);assert.equal(d.events[0].date,date);assert.equal(d.events[0].text,text);assert.deepEqual(d.events[0].sourceIds,['s1']);assert.equal(d.sources[0].text,text);}
+});
+test('una fecha sin año se conserva sin inventar el año',()=>{
+ const d=E.analyze('El 10 de octubre se entrega el proyecto.');assert.equal(d.events[0].date,'10 de octubre');assert.equal(E.dateOrder(d.events[0].date),null);
+});
+test('se rechazan días imposibles y se respetan los años bisiestos',()=>{
+ for(const date of ['31/02/2026','29 de febrero de 2025','2026-13-10','32 de octubre de 2026','31 de abril de 2026'])assert.equal(E.analyze('La prueba será el '+date+'.').events.length,0,date);
+ assert.equal(E.analyze('La prueba fue el 29 de febrero de 2024.').events[0].date,'29 de febrero de 2024');
+});
+test('las fechas se pueden ordenar por año, mes y día sin depender del formato',()=>{
+ const dates=['10/10/2026','1821','2 de enero de 2026','2025-12-31','octubre de 2026'];assert.deepEqual(dates.sort((a,b)=>E.dateOrder(a)-E.dateOrder(b)),['1821','2025-12-31','2 de enero de 2026','octubre de 2026','10/10/2026']);
+});
+test('no se inventan fechas en fotosíntesis ni se confunden magnitudes con años',()=>{
+ for(const text of ['La fotosíntesis transforma la luz en energía química.','El circuito consume 1200 W y trabaja a 2000 Hz.'])assert.equal(E.analyze(text).events.length,0);
+});
