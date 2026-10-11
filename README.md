@@ -2,11 +2,11 @@
 
 Prototipo educativo para convertir apuntes en material de repaso: ideas, mapas editables, pasos, fechas, tablas y fórmulas. El modo básico usa reglas; no es inteligencia artificial y sus resultados deben revisarse.
 
-## Probar sin instalar nada
+## Probar el prototipo
 
 1. Descarga el repositorio con **Code → Download ZIP**.
 2. Extrae toda la carpeta ZIP antes de abrir los archivos.
-3. Abre `index.html` en tu navegador y pulsa **Ver ejemplo**, o pega tus apuntes.
+3. En Windows abre **Iniciar.cmd** y utiliza la página que se abre en tu navegador. Requiere Node.js 20 o posterior. También puedes abrir `index.html` directamente en un navegador que permita ejecutar archivos locales.
 4. Pulsa **Preparar mi material**.
 
 Consulta [la guía de uso completa](COMO-USAR.md) para editar, guardar y compartir clases.
@@ -29,7 +29,7 @@ npm test
 npm run build
 ```
 
-`npm start` abre el servidor en http://127.0.0.1:4317; entra en esa dirección con tu navegador. Iniciar el servidor por sí solo no instala ni verifica la IA. En Windows también puedes ejecutar `Iniciar.cmd`.
+`npm start` abre el servidor en http://127.0.0.1:4318; entra en esa dirección con tu navegador. El arranque del prototipo utiliza siempre el modo básico. La integración experimental se inicia por separado con `npm run start:experimental`. En Windows también puedes ejecutar `Iniciar.cmd`.
 
 Ejecuta `npm run build` después de cambiar la interfaz para actualizar el HTML exportable.
 
