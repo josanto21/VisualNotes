@@ -2,7 +2,7 @@
 
 ## 1. Abrir el prototipo
 
-Descarga el ZIP desde GitHub, extrae **todo** su contenido y abre `index.html`. Mantén los archivos JavaScript y CSS junto al HTML. No necesitas instalar modelos ni introducir claves para usar el modo básico.
+Descarga el ZIP desde GitHub y extrae **todo** su contenido. En Windows, con Node.js 20 o posterior, abre **Iniciar.cmd**: inicia el prototipo básico y abre http://127.0.0.1:4318 en tu navegador. Mantén la consola abierta mientras lo utilizas. Para detenerlo pulsa Ctrl+C. También puedes abrir `index.html` directamente en un navegador que admita archivos locales. Mantén los archivos JavaScript y CSS junto al HTML. No necesitas instalar modelos ni introducir claves para usar el modo básico.
 
 ## 2. Añadir apuntes
 
@@ -32,7 +32,7 @@ Después de editar una clase portátil, vuelve a descargarla para conservar los 
 
 ## Problemas frecuentes
 
-**La página no tiene diseño o no responde:** extrae todo el ZIP y conserva los archivos juntos; no abras el HTML dentro del archivo comprimido.
+**La página no tiene diseño o no responde:** extrae todo el ZIP y conserva los archivos juntos; no abras el HTML dentro del archivo comprimido. Cierra las pestañas anteriores y abre **Iniciar.cmd**. Utiliza la dirección http://127.0.0.1:4318; recarga con Ctrl+F5 si conservabas una versión anterior.
 
 **No aparecen fechas, tablas o fórmulas:** esas vistas dependen del contenido explícito de los apuntes. Prueba uno de los ejemplos.
 
